@@ -1,1 +1,246 @@
-Hello World
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.checked {
+  color: #7ACDDA;
+}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    margin:0;
+    overflow-x:hidden; 
+    font-family: Comic Sans MS, Comic Sans, cursive;
+    scrollbar-base-color: #101029;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(16,16,41,1) 100%, rgba(0,212,255,1) 100%);
+    
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #101029;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1; 
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #51ACC2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  color: #7ACDDA;
+}
+
+.main {
+  padding: 16px;
+  margin-top: 30px;
+  height: 1500px; /* Used in this example to enable scrolling */
+}
+
+</style>
+<style>
+    .container {
+      position: relative;
+      width: 49%;
+    }
+    
+    .image {
+      /*display: block;*/
+      width: 100%;
+      height: auto;
+    }
+    
+    .overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      transition: .5s ease;
+      background-color: #008CBA;
+    }
+    
+    .container:hover .overlay {
+      opacity: 1;
+    }
+    
+    .text {
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .scroll {
+        border: none;
+        padding: 5px;
+        font: 24px/36px sans-serif;
+        width: 200px;
+        height: 200px;
+        overflow: scroll;
+        overflow-x: hidden; 
+    }
+    ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+    ::-webkit-scrollbar-track {
+        border: 1px solid rgb(0, 0, 0);
+        background-color: #101029;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #51ACC2;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #7ACDDA;
+    }
+
+    .space-div {
+        padding-left: 10px;
+    }
+
+</style>
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="#jump-about">About</a>
+  <a href="#jump-projects">Projects</a>
+  <a href="#jump-skills">Skills</a>
+</div>
+
+<div class="">
+
+<section id="jump-about">
+<div id="aboutMe" class = "space-div" style="float: left">
+    <br><br>
+    <img src = "profile.jpeg" id = "profile" style="border-radius: 80%; padding-top: 2%; padding-right: 1%; float: right; height: auto; max-width: 29%; right: sticky;"/>
+    <div style='max-width: 65%;'>
+    <h3 style="color: white;">Hello There! I am</h3>
+    <h1 style="color: #51ACC2">Venkat Bollapragada</h1>
+    <p style="color: white;">I'm a Computer Science Major at UCLA entering my second year. I'm passionate about Machine Learning, AI, and ethics and equity in computer science</p>
+    <p style="color: white;">I'm part of ACM AI, and UPE at UCLA</p>
+    <p style="color: white;">You can find my resume here</p>
+    <p style="color: white;">I'm a Tennis, Star Wars, F1, and videogame enthusiast </p>
+    <p style="color: white;">You can see what I've been working on below!</p>
+    </div>
+    <div id="icons"> 
+        <a href = "mailto:venkatyb@g.ucla.edu"><img style ='height: 40px; width: 40px; object-fit: contain; padding-right: 10px;' src="email_icon.png"/></a>
+        <a href = "https://github.com/vbKenobi"><img style ='height: 45px; width: 45px; object-fit: contain; padding-right: 10px;' src="github-icon.png"/></a> 
+        <a href = "https://www.linkedin.com/in/venkat-bollapragada"><img style ='height: 40px; width: 40px; object-fit: contain;' src="linkden_icon.png"/></a>
+    </div>
+</div>
+</section>
+
+<section id="jump-projects" style="float: left;">
+<div class="space-div"><h2 style="color: #51ACC2;">Projects: </h2></div>
+<table> 
+<td>
+<div style="display: table-row">
+<div class="container" style="float: right">
+    <img src="temp.png" alt="Avatar" class="image">
+    <div class="overlay">
+      <div class="text">Project 1</div>
+    </div>
+</div>
+<div class="container">
+    <img src="temp.png" alt="Avatar" class="image">
+    <div class="overlay">
+      <div class="text">Project 2</div>
+    </div>
+</div>
+</div>
+</td>
+</table>
+<table> 
+    <td>
+    <div style="display: table-row">
+    <div class="container" style="float: right">
+        <img src="temp.png" alt="Avatar" class="image">
+        <div class="overlay">
+          <div class="text">Project 3</div>
+        </div>
+    </div>
+    <div class="container">
+        <img src="temp.png" alt="Avatar" class="image">
+        <div class="overlay">
+          <div class="text">Project 4</div>
+        </div>
+    </div>
+    </div>
+    </td>
+</table>
+</section>
+
+<section id="jump-skills" style="float: left;">
+    <div class="space-div">
+    <h2 style="color: #51ACC2">Skills:</h2>
+
+    <h3 style="color: #51ACC2">C++: 
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+    </h3>
+
+    <h3  style="color: #51ACC2">Python: 
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+    </h3>
+
+    <h3  style="color: #51ACC2">Git: 
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+    </h3>
+
+    <h3  style="color: #51ACC2">Command Line: 
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+    </h3>
+
+    <h3  style="color: #51ACC2">HTML and CSS: 
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+    </h3>
+
+    <h3  style="color: #51ACC2">Java: 
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+
+    </h3>
+</div>
+</section>
+
+</body>
+</html>
