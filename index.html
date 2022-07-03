@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 .checked {
-  color: #7ACDDA;
+  color: #A2EEF2;
 }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,6 @@ body {
     font-family: Comic Sans MS, Comic Sans, cursive;
     scrollbar-base-color: #101029;
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(16,16,41,1) 100%, rgba(0,212,255,1) 100%);
-    
 }
 
 .navbar {
@@ -74,7 +73,7 @@ body {
     }
     
     .container:hover .overlay {
-      opacity: 1;
+      opacity: 75%;
     }
     
     .text {
@@ -119,7 +118,26 @@ body {
         padding-left: 10px;
     }
 
-</style>
+    .gradientText {
+      background-color: #51ACC2;
+      background-image: linear-gradient(45deg, #51ACC2, #7ACDDA);
+      background-size: 100%;
+      background-repeat: repeat;
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      -moz-background-clip: text;
+      -moz-text-fill-color: transparent;
+    }
+
+    .description {
+      color: #FFF; 
+    }
+
+    .description em {
+      color: #51ACC2;
+    }
+
 </style>
 </head>
 <body>
@@ -138,54 +156,56 @@ body {
     <img src = "profile.jpeg" id = "profile" style="border-radius: 80%; padding-top: 2%; padding-right: 1%; float: right; height: auto; max-width: 29%; right: sticky;"/>
     <div style='max-width: 65%;'>
     <h3 style="color: white;">Hello There! I am</h3>
-    <h1 style="color: #51ACC2">Venkat Bollapragada</h1>
+    <h1 style="color: #A2EEF2;">Venkat Bollapragada</h1>
     <p style="color: white;">I'm a Computer Science Major at UCLA entering my second year. I'm passionate about Machine Learning, AI, and ethics and equity in computer science</p>
     <p style="color: white;">I'm part of ACM AI, and UPE at UCLA</p>
-    <p style="color: white;">You can find my resume here</p>
+    <p style="color: white;" class="description">You can find my <a href="resume.pdf" download><em>resume here</em></a></p>
     <p style="color: white;">I'm a Tennis, Star Wars, F1, and videogame enthusiast </p>
     <p style="color: white;">You can see what I've been working on below!</p>
     </div>
+    <br>
     <div id="icons"> 
-        <a href = "mailto:venkatyb@g.ucla.edu"><img style ='height: 40px; width: 40px; object-fit: contain; padding-right: 10px;' src="email_icon.png"/></a>
-        <a href = "https://github.com/vbKenobi"><img style ='height: 45px; width: 45px; object-fit: contain; padding-right: 10px;' src="github-icon.png"/></a> 
-        <a href = "https://www.linkedin.com/in/venkat-bollapragada"><img style ='height: 40px; width: 40px; object-fit: contain;' src="linkden_icon.png"/></a>
+        <a href = "mailto:venkatyb@g.ucla.edu"><img style ='height: auto; width: auto; max-height: 50px; max-width: 50px; object-fit: contain; padding-right: 10px;' src="email_icon.png"/></a>
+        <a href = "https://github.com/vbKenobi"><img style ='height: auto; width: auto; max-height: 55px; max-width: 55px; object-fit: contain; padding-right: 10px;' src="github-icon.png"/></a> 
+        <a href = "https://www.linkedin.com/in/venkat-bollapragada"><img style ='height: auto; width: auto; max-height: 50px; max-width: 50px; object-fit: contain;' src="linkden_icon.png"/></a>
     </div>
 </div>
 </section>
 
 <section id="jump-projects" style="float: left;">
 <div class="space-div"><h2 style="color: #51ACC2;">Projects: </h2></div>
-<table> 
+<table style=" max-width: 85%; max-height: 10%" class = "space-div"> 
 <td>
 <div style="display: table-row">
 <div class="container" style="float: right">
-    <img src="temp.png" alt="Avatar" class="image">
+    <img src="nibble.png" alt="Avatar" class="image">
     <div class="overlay">
-      <div class="text">Project 1</div>
+      <div class="text">Nibble: a social media app that allows college students to post and like and dislike recipes so that they don't have to eat cup noddles</div>  
     </div>
 </div>
 <div class="container">
-    <img src="temp.png" alt="Avatar" class="image">
+    <img src="neural.png" alt="Avatar" class="image">
     <div class="overlay">
-      <div class="text">Project 2</div>
+      <div class="text">DEL (Decentralized Edge Learning): created ML models applicable for decentralized federated learning and used that on a edge learning simulator </div>
+      
     </div>
 </div>
 </div>
 </td>
 </table>
-<table> 
+<table style=" max-width: 85%; max-height: 10%" class = "space-div"> 
     <td>
     <div style="display: table-row">
     <div class="container" style="float: right">
-        <img src="temp.png" alt="Avatar" class="image">
+        <img src="peach.png" alt="Avatar" class="image">
         <div class="overlay">
-          <div class="text">Project 3</div>
+          <div class="text">Super Peach Sister: a spin off of the classic super smash mario game</div>
         </div>
     </div>
     <div class="container">
-        <img src="temp.png" alt="Avatar" class="image">
+        <img src="scadnano.png" alt="Avatar" class="image">
         <div class="overlay">
-          <div class="text">Project 4</div>
+          <div class="text">Scadnano: a website tool for designing DNA structures based of off Cadnano</div>
         </div>
     </div>
     </div>
