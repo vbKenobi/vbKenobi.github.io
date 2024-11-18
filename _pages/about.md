@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-I am a senior undergraduate student at UCLA, completing my BS in Computer Science. Previously, I was a Software Engineering Intern at [Microsoft](https://www.microsoft.com/en-us/), where I was part of Windows Fundamentals. Here I specifcally worked as part of the Windows updates team and developed tools to help debug windows udpate deploymetns. I am also an undergraduate researcher at [SysArch](https://ssysarch.ee.ucla.edu/), focusing on adversarial machine learning attacks and defenses. My interests span Operating Systems, Programming Languages, Machine Learning, and Theoretical Computer Science, and are at a an upper-division undergradaute level, with a few graduate level courses in Machine Learning.
+I am a senior undergraduate student at [UCLA](https://www.cs.ucla.edu/), completing my BS in Computer Science. Previously, I was a Software Engineering Intern at [Microsoft](https://www.microsoft.com/en-us/), where I was part of Windows Fundamentals. Here I specifcally worked as part of the Windows updates team and developed tools to help debug windows udpate deployments. I am also an undergraduate researcher at [SysArch](https://ssysarch.ee.ucla.edu/), focusing on adversarial machine learning attacks and defenses. My interests span Operating Systems, Programming Languages, Machine Learning, and Theoretical Computer Science, and are at a an upper-division undergradaute level, with a few graduate level courses in Machine Learning.
 
 
 More About Me
