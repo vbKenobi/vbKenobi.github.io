@@ -7,17 +7,24 @@ redirect_from:
   - /about.html
 ---
 
-I am a senior undergraduate student at UCLA, completing my BS in Computer Science. Previously, I was a Software Engineering Intern at [Roche](https://www.roche.com/), where I developed software test suites and optimized file transfer protocols for a molecular sequencer. I am also an undergraduate researcher at [SysArch](https://ssysarch.ee.ucla.edu/), focusing on adversarial machine learning attacks and defenses. Before this, I conducted research on federated machine learning at UCSC and worked on a website for DNA origami at UC Davis. My interests span Operating Systems, Programming Languages, Machine Learning, and Theoretical Computer Science. I have taken several upper-division undergraduate courses and a few graduate-level courses in Machine Learning.
+I am a senior undergraduate student at UCLA, completing my BS in Computer Science. Previously, I was a Software Engineering Intern at [Microsoft](https://www.microsoft.com/en-us/), where I was part of Windows Fundamentals. Here I specifcally worked as part of the Windows updates team and developed tools to help debug windows udpate deploymetns. I am also an undergraduate researcher at [SysArch](https://ssysarch.ee.ucla.edu/), focusing on adversarial machine learning attacks and defenses. My interests span Operating Systems, Programming Languages, Machine Learning, and Theoretical Computer Science, and are at a an upper-division undergradaute level, with a few graduate level courses in Machine Learning.
 
 
 More About Me
 ======
-I grew up in sunny San Diego and attended Canyon Crest Academy for high school. There, I was a founding member of the Cryptography Club and had a great experience as a TA for three quarters in Math, Physics, and Computer Science. I then enrolled at UCLA as an undergraduate student in Computer Science. While at UCLA, I got involved with [ACM at UCLA](https://www.uclaacm.com/), specifically as part of ACM AI. I served as a workshops officer, where I had the privilege of hosting weekly workshops to teach the basics of machine learning to hundreds of undergraduate students. To continue exploring my passion for teaching, I am currently making my notes for several upper-division classes publicly available and open-source. I am also working on launching a YouTube channel (@CSTheoryTutor).
+I grew up in sunny San Diego and attended Canyon Crest Academy for high school. There, I was a founding member of the Cryptography Club and had a great experience as a TA for three quarters in Math, Physics, and Computer Science. I then enrolled at UCLA as an undergraduate student in Computer Science. While at UCLA, I got involved with [ACM at UCLA](https://www.uclaacm.com/), specifically as part of ACM AI. I served as a workshops officer, where I had the privilege of hosting weekly workshops to teach the basics of machine learning to hundreds of undergraduate students. During the beginning of my undergrad I also did research on federated machine learning at UCSC and worked on a website for DNA origami at UC Davis. Before going to Microsoft as an intern I was a Software Engineering Intern at [Roche](https://www.roche.com/), where I developed software test suites and optimized file transfer protocols for a molecular sequencer. 
+
+Lately, I’ve been focusing on making computer science education more engaging and accessible for everyone. I am currently making my notes for several upper-division classes publicly available and open-source. I am also working on launching a YouTube channel (@CSTheoryTutor).
+
+Site Outline
+======
+If you would like to get in contact with me the best way to reach me is via email. On other pages you can find information about what books I am reading, access to notes I have taken or compiled, previous expereince, and any talks or new videos I have released. 
+
 
 Some Fun Facts
 ======
 1. I am a huge star wars fan, and maybe a nerd? :eyes: 
-1. I love to play tennis, and the :gaot: is Rafa 
+1. I love to play tennis, and the :goat: is Rafa 
 1. My favorite card game is Coup (10/10 recommend)
 1. I played the piano for 10 years :notes: and now I'm trying to learn the guitar :guitar:
 1. Favorite food is Gobi Manchurian 
