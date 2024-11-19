@@ -27,16 +27,8 @@ author_profile: true
   }
 </style>
 
-<div class="portfolio-grid">
-  {% for post in site.portfolio %}
-    <div class="portfolio-item">
-      <!-- Render the title -->
-      <h2>{{ post.title }}</h2>
-
-      <!-- Render the excerpt (HTML-supported) -->
-      <div>
-        post.excerpt
-      </div>
-    </div>
-  {% endfor %}
-</div>
+{% for post in site.portfolio %}
+  <div class="portfolio-item">
+    {% include archive-single.html %}
+  </div>
+{% endfor %}
