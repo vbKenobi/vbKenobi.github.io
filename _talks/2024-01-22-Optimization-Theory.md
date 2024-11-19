@@ -1,7 +1,7 @@
 ---
 title: "Optimiality of Gradient Descent and NAGD for Convex Functions"
 collection: talks
-type: "Talk"
+type: "Presentation"
 permalink: /talks/2024OptimizationTheory
 venue: "UCLA ACM AI Theory Track Workshop #1"
 date: 2024-01-22

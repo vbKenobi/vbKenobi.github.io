@@ -1,7 +1,7 @@
 ---
 title: "Beginner Track at ACM AI"
 collection: talks
-type: "Talk"
+type: "Presentation"
 permalink: /talks/2023BeginnerTrack
 venue: "UCLA ACM AI Beginner Track"
 date: 2023-10-09
