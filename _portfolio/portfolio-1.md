@@ -1,7 +1,7 @@
 ---
-title: "Portfolio item number 1"
-excerpt: "Short description of portfolio item number 1<br/><img src='/images/500x300.png'>"
+title: "cRush"
+excerpt: "cRush is a language that I am currenltly developing based on the textboook crafting interpreters <br/><img src='/images/crush.png'>"
 collection: portfolio
 ---
 
-This is an item in your portfolio. It can be have images or nice text. If you name the file .md, it will be parsed as markdown. If you name the file .html, it will be parsed as HTML. 
+The goal of cRush is to build a language that is like python, has semi-colons, is statically typed, and can also integrate well with existing python based machine learning libraries. It is written in C++ and uses Robert Nystrom's textbook language LOX as the base. It is currently under development. 
