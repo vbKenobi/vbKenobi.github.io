@@ -5,7 +5,7 @@ permalink: /portfolio/
 author_profile: true
 ---
 
-<!-- Add CSS directly for the grid -->
+<!-- Add CSS for the grid -->
 <style>
   .portfolio-grid {
     display: grid;
@@ -21,13 +21,22 @@ author_profile: true
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+
+  .portfolio-item h2 {
+    margin-top: 0;
+  }
 </style>
 
 <div class="portfolio-grid">
   {% for post in site.portfolio %}
     <div class="portfolio-item">
-      <!-- Process Markdown for each portfolio item -->
-      {{ post.content | markdownify }}
+      <!-- Render the title -->
+      <h2>{{ post.title }}</h2>
+
+      <!-- Render the excerpt (HTML-supported) -->
+      <div>
+        {{ post.excerpt | markdownify }}
+      </div>
     </div>
   {% endfor %}
 </div>
