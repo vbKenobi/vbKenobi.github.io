@@ -5,7 +5,7 @@ permalink: /portfolio/
 author_profile: true
 ---
 
-<!-- Add CSS directly to this file -->
+<!-- Add CSS directly for the grid -->
 <style>
   .portfolio-grid {
     display: grid;
@@ -26,8 +26,8 @@ author_profile: true
 <div class="portfolio-grid">
   {% for post in site.portfolio %}
     <div class="portfolio-item">
-      {% include archive-single.html %}
+      <!-- Process Markdown for each portfolio item -->
+      {{ post.content | markdownify }}
     </div>
   {% endfor %}
 </div>
-
