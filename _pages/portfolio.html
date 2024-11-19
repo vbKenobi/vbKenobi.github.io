@@ -5,9 +5,29 @@ permalink: /portfolio/
 author_profile: true
 ---
 
-<!-- {% include base_path %} -->
+<!-- Add CSS directly to this file -->
+<style>
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
 
-{% for post in site.portfolio %}
-  {% include archive-single.html %}
-{% endfor %}
+  .portfolio-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+<div class="portfolio-grid">
+  {% for post in site.portfolio %}
+    <div class="portfolio-item">
+      {% include archive-single.html %}
+    </div>
+  {% endfor %}
+</div>
 

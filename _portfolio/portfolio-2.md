@@ -1,6 +1,6 @@
 ---
 title: "Movie Central"
-excerpt: "worked on a website that would host movie information and ratings <br/><img src='/images/movie.png'>"
+excerpt: "worked on a website that would host movie information and ratings <br/><img src="/images/movie.png" style="object-fit: cover; width: 300px; height: 200px; overflow: hidden;">"
 collection: portfolio
 ---
 

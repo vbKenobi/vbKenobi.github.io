@@ -1,6 +1,6 @@
 ---
 title: "OS Projects"
-excerpt: "Round Robin simulator, thread safe hashamps <br/><img src='/images/hash.png'>"
+excerpt: "Round Robin simulator, thread safe hashamps <br/><img src="/images/hash.png" style="object-fit: cover; width: 300px; height: 200px; overflow: hidden;">"
 collection: portfolio
 ---
 

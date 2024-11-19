@@ -1,6 +1,7 @@
 ---
 title: "cRush"
-excerpt: "cRush is a language that I am currenltly developing based on the textboook crafting interpreters <br/><img src='/images/crush.png'>"
+excerpt: "cRush is a language that I am currenltly developing based on the textboook crafting interpreters <br/><img src="/images/crush.png" style="object-fit: cover; width: 300px; height: 200px; overflow: hidden;">
+"
 collection: portfolio
 ---
 

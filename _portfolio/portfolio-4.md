@@ -1,6 +1,6 @@
 ---
 title: "Fast and Reliable Data Transfer over UDP"
-excerpt: "Added reliable data transfer with congestion control over UDP <br/><img src='/images/network.png'>"
+excerpt: "Added reliable data transfer with congestion control over UDP <br/><img src="/images/network.png" style="object-fit: cover; width: 300px; height: 200px; overflow: hidden;">"
 collection: portfolio
 ---
 
