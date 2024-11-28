@@ -1,13 +1,30 @@
----
-layout: archive
-title: "Portfolio"
-permalink: /portfolio/
-author_profile: true
----
+# Four Box Layout
 
-{% include base_path %}
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
 
+<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
+  <h3>cRush</h3>
+  <img src="/images/crush.png" alt="cRush" style="width:100%; max-width: 300px;">
+  <p>The goal of cRush is to build a language that is like python, has semi-colons, is statically typed, and can also integrate well with existing python based machine learning libraries. It is written in C++ and uses Robert Nystrom's textbook language LOX as the base. It is currently under development.</p>
+</div>
 
-{% for post in site.portfolio %}
-  {% include archive-single.html %}
-{% endfor %}
+<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
+  <h3>Movie Central</h3>
+  <img src="/images/movie.png" alt="Image 2" style="width:100%; max-width: 300px;">
+  <p>Designed a movie database schema using PostgreSQL and established relational tables to capture intricate connections within movie information, including cast, streaming platforms, social media accounts, videos, awards, and localizations. Developed TypeScript APIs for database queries. Developed Python script to reformat the order of relational tables to mitigate dependency conflicts and optimize database creation. Developed Machine Learning algorithms to suggest similar movies based on cosine similarity.</p>
+</div>
+
+<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
+  <h3>OS Projects</h3>
+  <img src="/images/hash.png" alt="Image 3" style="width:100%; max-width: 300px;">
+  <p>Developed a round-robin simulator capable of processing a list of tasks, each with its anticipated runtime, and generating output for each process, including average wait time and total execution time. Designed a thread-safe hashmap and optimized its performance by adjusting mutex lock granularity, hash-table size, and the number of concurrent threads.</p>
+</div>
+
+<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
+  <h3>TCP over UDP</h3>
+  <img src="/images/network.png" alt="Image 4" style="width:100%; max-width: 300px;">
+  <p>
+    Implemented reliable data transfer of a file over UDP using c and c++ socket programming. Then implemented congestion control settings such as dynamic timeouts, backoff when receiving duplicte ACKs, and fast retransmit for recovery.</p>
+</div>
+
+</div>
