@@ -5,33 +5,31 @@ permalink: /portfolio/
 author_profile: true
 ---
 {% include base_path %}
-Four Box Layout
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
 
-<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
-  <h3>cRush</h3>
-  <img src="/images/crush.png" alt="cRush" style="width:100%; max-width: 300px;">
-  <p>The goal of cRush is to build a language that is like python, has semi-colons, is statically typed, and can also integrate well with existing python based machine learning libraries. It is written in C++ and uses Robert Nystrom's textbook language LOX as the base. It is currently under development.</p>
-</div>
-
-<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
-  <h3>Movie Central</h3>
-  <img src="/images/movie.png" alt="Image 2" style="width:100%; max-width: 300px;">
-  <p>Designed a movie database schema using PostgreSQL and established relational tables to capture intricate connections within movie information, including cast, streaming platforms, social media accounts, videos, awards, and localizations. Developed TypeScript APIs for database queries. Developed Python script to reformat the order of relational tables to mitigate dependency conflicts and optimize database creation. Developed Machine Learning algorithms to suggest similar movies based on cosine similarity.</p>
-</div>
-
-<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
-  <h3>OS Projects</h3>
-  <img src="/images/hash.png" alt="Image 3" style="width:100%; max-width: 300px;">
-  <p>Developed a round-robin simulator capable of processing a list of tasks, each with its anticipated runtime, and generating output for each process, including average wait time and total execution time. Designed a thread-safe hashmap and optimized its performance by adjusting mutex lock granularity, hash-table size, and the number of concurrent threads.</p>
-</div>
-
-<div style="flex: 1 1 45%; margin: 10px; text-align: center;">
-  <h3>TCP over UDP</h3>
-  <img src="/images/network.png" alt="Image 4" style="width:100%; max-width: 300px;">
-  <p>
-    Implemented reliable data transfer of a file over UDP using c and c++ socket programming. Then implemented congestion control settings such as dynamic timeouts, backoff when receiving duplicte ACKs, and fast retransmit for recovery.</p>
-</div>
-
-</div>
+  <div style="flex: 1 1 45%; margin: 10px; text-align: center; border: 1px solid #ddd; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); padding: 15px; border-radius: 8px;">
+    <h3>cRush</h3>
+    <img src="/images/crush.png" alt="cRush" style="width:100%; max-width: 300px; border-radius: 5px;">
+    <p>The goal of cRush is to build a language that is like Python, has semi-colons, is statically typed, and can integrate well with existing Python-based machine learning libraries. It is written in C++ and uses Robert Nystrom's textbook language LOX as the base. It is currently under development.</p>
+  </div>
+  
+  <div style="flex: 1 1 45%; margin: 10px; text-align: center; border: 1px solid #ddd; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); padding: 15px; border-radius: 8px;">
+    <h3>Movie Central</h3>
+    <img src="/images/movie.png" alt="Movie Central" style="width:100%; max-width: 300px; border-radius: 5px;">
+    <p>Designed a movie database schema using PostgreSQL and established relational tables to capture intricate connections within movie information. Developed a Python script to reformat the order of relational tables to mitigate dependency conflicts and optimize database creation. Developed machine learning algorithms to suggest similar movies based on cosine similarity.</p>
+  </div>
+  
+  <div style="flex: 1 1 45%; margin: 10px; text-align: center; border: 1px solid #ddd; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); padding: 15px; border-radius: 8px;">
+    <h3>OS Projects</h3>
+    <img src="/images/hash.png" alt="OS Projects" style="width:100%; max-width: 300px; border-radius: 5px;">
+    <p>Developed a round-robin simulator capable of processing a list of tasks, each with its anticipated runtime, and generating output for each process, including average wait time and total execution time. Designed a thread-safe hashmap and optimized its performance by adjusting mutex lock granularity, hash-table size, and the number of concurrent threads.</p>
+  </div>
+  
+  <div style="flex: 1 1 45%; margin: 10px; text-align: center; border: 1px solid #ddd; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); padding: 15px; border-radius: 8px;">
+    <h3>TCP over UDP</h3>
+    <img src="/images/network.png" alt="TCP over UDP" style="width:100%; max-width: 300px; border-radius: 5px;">
+    <p>Implemented reliable data transfer of a file over UDP using C and C++ socket programming. Then implemented congestion control settings such as dynamic timeouts, backoff when receiving duplicate ACKs, and fast retransmit for recovery.</p>
+  </div>
+  
+  </div>
