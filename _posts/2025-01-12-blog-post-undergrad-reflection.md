@@ -7,7 +7,7 @@ tags:
 ---
 I’m happy to say that my ego has grown to the point where I feel ready to write about everything I’ve learned over the past four years in college. Hopefully, this post can help someone out there. Choosing a title for this post was a bit of a debate. Some of the options I considered included: Reflections on College, College Advice, Surviving College, How to Graduate from UCLA, and Graduating with a Computer Science Degree: Takeaways. Honestly, any of these could work, but they all miss something essential.
 
-Yes, I did graduate with a CS degree, but much of what I’ll talk about here has little to do with computer science. It would even be a stretch to say I’m an expert in the field. Sure, I’ve graduated, and I have a broad understanding of many topics in CS, but to claim I possess deep insights into the entire field at this stage would be laughable. That’s a topic for another post (insert link here).
+Yes, I did graduate with a CS degree, but much of what I’ll talk about here has little to do with computer science. It would even be a stretch to say that I'm qualified to talk about the field. Sure, I’ve graduated, and I have a broad understanding of many topics in CS, but to claim I possess deep insights into the entire field at this stage would be laughable. That’s a topic for another post (insert link here).
 
 Titles like College Reflections also fail to capture one important truth: no one else will have the same experience I did. In fact, very few people will even have a similar one. With all that said, let me clarify my intent:
 
