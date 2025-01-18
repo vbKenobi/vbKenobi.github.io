@@ -27,6 +27,7 @@ Some Fun Facts
 1. I love to play tennis, and the :goat: is Rafa 
 1. My favorite card game is Coup (10/10 recommend)
 1. I played the piano for 10 years :notes: and now I'm trying to learn the guitar :guitar:
+1. I also play a lot of [brawl stars](https://brawlify.com/stats/profile/988QYRU)
 1. Favorite food is Gobi Manchurian 
 
 <!-- A data-driven personal website

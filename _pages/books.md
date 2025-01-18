@@ -6,8 +6,19 @@ redirect_from:
   - /goodReads/
   - /goodReads.html
 ---
+## Cool Links
+[Andrew Bosworth 'Boz' Blog](https://boz.com/)
+[Latest in TOC](https://theory.report/)
+[Windows on Theory](https://windowsontheory.org/)
+[Papres with Code](https://paperswithcode.com/)
+[Computational Complexity](https://blog.computationalcomplexity.org/)
+[Pickles](https://www.gocomics.com/pickles/)
+[xkcd](https://xkcd.com/)
 
 ## Current Readings
+[*Dsitributed Systems, Van Steen & Tanenbaum*](https://www.distributed-systems.net/index.php/books/ds4/)
+* Just started
+
 [*Computational Complexity a Modern Approach*](https://theory.cs.princeton.edu/complexity/book.pdf)
 * Currently near the end of Part I and at the start of Part II 
 
