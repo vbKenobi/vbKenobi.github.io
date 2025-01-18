@@ -7,12 +7,12 @@ redirect_from:
   - /goodReads.html
 ---
 ## Cool Links
-[Andrew Bosworth 'Boz' Blog](https://boz.com/)
-[Latest in TOC](https://theory.report/)
-[Windows on Theory](https://windowsontheory.org/)
-[Papres with Code](https://paperswithcode.com/)
-[Computational Complexity](https://blog.computationalcomplexity.org/)
-[Pickles](https://www.gocomics.com/pickles/)
+[Andrew Bosworth 'Boz' Blog](https://boz.com/),
+[Latest in TOC](https://theory.report/),
+[Windows on Theory](https://windowsontheory.org/),
+[Papres with Code](https://paperswithcode.com/),
+[Computational Complexity](https://blog.computationalcomplexity.org/),
+[Pickles](https://www.gocomics.com/pickles/),
 [xkcd](https://xkcd.com/)
 
 ## Current Readings
