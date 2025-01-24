@@ -3,7 +3,6 @@ title: "Zig Zag Simulator"
 permalink: /zigZag/
 author_profile: false
 ---
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +15,12 @@ author_profile: false
             font-family: Arial, sans-serif;
         }
         input[type="number"] {
-            width: 40px;
+            width: 50px;
             margin: 2px;
+            text-align: center;
+        }
+        .matrix-row {
+            display: flex;
         }
         .graph-container {
             margin-top: 20px;
@@ -49,15 +52,16 @@ author_profile: false
                 return;
             }
 
-            container.innerHTML = '';
+            container.innerHTML = ''; // Clear existing matrix
 
             for (let i = 0; i < size; i++) {
                 const rowDiv = document.createElement('div');
+                rowDiv.classList.add('matrix-row');
                 for (let j = 0; j < size; j++) {
                     const input = document.createElement('input');
                     input.type = 'number';
+                    input.min = '0';
                     input.id = `cell-${i}-${j}`;
-                    input.style.width = '40px';
                     rowDiv.appendChild(input);
                 }
                 container.appendChild(rowDiv);
@@ -66,13 +70,18 @@ author_profile: false
 
         function generateGraph() {
             const size = document.getElementById('matrix-size').value;
+            if (!size) {
+                alert("Please specify and generate the adjacency matrix first.");
+                return;
+            }
+
             const matrix = [];
 
             for (let i = 0; i < size; i++) {
                 const row = [];
                 for (let j = 0; j < size; j++) {
                     const value = document.getElementById(`cell-${i}-${j}`).value || 0;
-                    row.push(parseInt(value));
+                    row.push(parseInt(value, 10));
                 }
                 matrix.push(row);
             }
