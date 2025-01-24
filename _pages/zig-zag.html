@@ -3,178 +3,119 @@ title: "Zig Zag Simulator"
 permalink: /zigZag/
 author_profile: false
 ---
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-<head>
-    <meta http-equiv="Content-type" content="text/html; charset=us-ascii">
-    <title>Graph from a Matrix</title>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.29.1"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.29.1"></script>
-    <script type="text/javascript" src="http://www.numericjs.com/lib/numeric-1.0.2.min.js"></script>
-    <style type="text/css">
-        path.link {
-            fill: none;
-            stroke: #111;
-            stroke-width: 1.5px;
+<h1>Graph from a Matrix</h1>
+
+<div class="matrix-container">
+    <label for="matrix-size">Matrix Size:</label>
+    <input type="number" id="matrix-size" min="2" max="10" value="4">
+    <button onclick="generateMatrix()">Generate Matrix</button>
+    <div id="matrix-inputs"></div>
+    <button onclick="generateGraph()">Generate Graph</button>
+</div>
+
+<script src="https://mbostock.github.io/d3/d3.js?1.29.1"></script>
+<script src="https://mbostock.github.io/d3/d3.geom.js?1.29.1"></script>
+<script src="https://mbostock.github.io/d3/d3.layout.js?1.29.1"></script>
+<script src="https://www.numericjs.com/lib/numeric-1.0.2.min.js"></script>
+
+<script type="text/javascript">
+    let matrix = [];
+
+    function generateMatrix() {
+        const size = parseInt(document.getElementById("matrix-size").value, 10);
+        if (!size || size < 2 || size > 10) {
+            alert("Please enter a matrix size between 2 and 10.");
+            return;
         }
 
-        circle {
-            fill: #ccc;
-            stroke: #333;
-            stroke-width: 1.5px;
-        }
+        const container = document.getElementById("matrix-inputs");
+        container.innerHTML = "";
 
-        text {
-            font: 10px sans-serif;
-            pointer-events: none;
-        }
-
-        .matrix-container {
-            margin-bottom: 20px;
-        }
-
-        input[type="number"] {
-            width: 50px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <h1>Graph from a Matrix</h1>
-
-    <div class="matrix-container">
-        <label for="matrix-size">Matrix Size:</label>
-        <input type="number" id="matrix-size" min="2" max="10" value="4">
-        <button onclick="generateMatrix()">Generate Matrix</button>
-        <div id="matrix-inputs"></div>
-        <button onclick="generateGraph()">Generate Graph</button>
-    </div>
-
-    <script type="text/javascript">
-        let matrix = [];
-
-        function generateMatrix() {
-            const size = parseInt(document.getElementById("matrix-size").value, 10);
-            if (!size || size < 2 || size > 10) {
-                alert("Please enter a matrix size between 2 and 10.");
-                return;
+        const table = document.createElement("table");
+        for (let i = 0; i < size; i++) {
+            const row = document.createElement("tr");
+            matrix[i] = [];
+            for (let j = 0; j < size; j++) {
+                const cell = document.createElement("td");
+                const input = document.createElement("input");
+                input.type = "number";
+                input.min = "0";
+                input.max = "1";
+                input.value = "0";
+                input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
+                cell.appendChild(input);
+                row.appendChild(cell);
+                matrix[i][j] = 0;
             }
+            table.appendChild(row);
+        }
+        container.appendChild(table);
+    }
 
-            const container = document.getElementById("matrix-inputs");
-            container.innerHTML = ""; // Clear previous matrix
-
-            const table = document.createElement("table");
-            for (let i = 0; i < size; i++) {
-                const row = document.createElement("tr");
-                matrix[i] = [];
-                for (let j = 0; j < size; j++) {
-                    const cell = document.createElement("td");
-                    const input = document.createElement("input");
-                    input.type = "number";
-                    input.min = "0";
-                    input.max = "1";
-                    input.value = "0";
-                    input.style.width = "40px";
-                    input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
-                    cell.appendChild(input);
-                    row.appendChild(cell);
-                    matrix[i][j] = 0; // Initialize with zeros
-                }
-                table.appendChild(row);
-            }
-            container.appendChild(table);
+    function generateGraph() {
+        if (!matrix || matrix.length === 0) {
+            alert("Please generate and fill in the adjacency matrix first.");
+            return;
         }
 
-        function generateGraph() {
-            if (!matrix || matrix.length === 0) {
-                alert("Please generate and fill in the adjacency matrix first.");
-                return;
-            }
+        draw(matrix);
+    }
 
-            draw(matrix);
-        }
-
-        function draw(matrix) {
-            const links = [];
-            for (let m = 0; m < matrix.length; m++) {
-                for (let n = 0; n < matrix[m].length; n++) {
-                    if (matrix[m][n] > 0) {
-                        links.push({
-                            source: String(m + 1),
-                            target: String(n + 1),
-                            type: "basic",
-                        });
-                    }
+    function draw(matrix) {
+        const links = [];
+        for (let m = 0; m < matrix.length; m++) {
+            for (let n = 0; n < matrix[m].length; n++) {
+                if (matrix[m][n] > 0) {
+                    links.push({
+                        source: String(m + 1),
+                        target: String(n + 1),
+                        type: "basic",
+                    });
                 }
             }
-
-            const nodes = {};
-            links.forEach((link) => {
-                link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
-                link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
-            });
-
-            const width = 960,
-                height = 500;
-
-            const force = d3.layout
-                .force()
-                .nodes(d3.values(nodes))
-                .links(links)
-                .size([width, height])
-                .linkDistance(150)
-                .charge(-500)
-                .on("tick", tick)
-                .start();
-
-            document.querySelectorAll("svg").forEach((svg) => svg.remove());
-
-            const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
-
-            const path = svg
-                .append("g")
-                .selectAll("path")
-                .data(force.links())
-                .enter()
-                .append("path")
-                .attr("class", "link");
-
-            const circle = svg
-                .append("g")
-                .selectAll("circle")
-                .data(force.nodes())
-                .enter()
-                .append("circle")
-                .attr("r", 10)
-                .call(force.drag);
-
-            const text = svg
-                .append("g")
-                .selectAll("text")
-                .data(force.nodes())
-                .enter()
-                .append("text")
-                .attr("x", 12)
-                .attr("y", ".31em")
-                .text((d) => d.name);
-
-            function tick() {
-                path.attr("d", function (d) {
-                    const dx = d.target.x - d.source.x,
-                        dy = d.target.y - d.source.y,
-                        dr = Math.sqrt(dx * dx + dy * dy);
-                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-                });
-
-                circle.attr("transform", (d) => `translate(${d.x},${d.y})`);
-
-                text.attr("transform", (d) => `translate(${d.x},${d.y})`);
-            }
         }
 
-        // Initialize with a 4x4 matrix
-        generateMatrix();
-    </script>
-</body>
-</html>
+        const nodes = {};
+        links.forEach((link) => {
+            link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
+            link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+        });
+
+        const width = 960,
+            height = 500;
+
+        const force = d3.layout
+            .force()
+            .nodes(d3.values(nodes))
+            .links(links)
+            .size([width, height])
+            .linkDistance(150)
+            .charge(-500)
+            .on("tick", tick)
+            .start();
+
+        document.querySelectorAll("svg").forEach((svg) => svg.remove());
+
+        const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+
+        const path = svg
+            .append("g")
+            .selectAll("path")
+            .data(force.links())
+            .enter()
+            .append("path")
+            .attr("class", "link");
+
+        const circle = svg
+            .append("g")
+            .selectAll("circle")
+            .data(force.nodes())
+            .enter()
+            .append("circle")
+            .attr("r", 10)
+            .call(force.drag);
+
+        const text = svg
+            .append("g")
+            .selectAll("text")
+            .data(force.
