@@ -3,190 +3,251 @@ title: "Zig Zag Simulator"
 permalink: /zigZag/
 author_profile: false
 ---
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adjacency Matrix to Graph</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        input[type="number"] {
-            width: 50px;
-            margin: 2px;
-            text-align: center;
-        }
-        .matrix-table {
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .matrix-table td {
-            padding: 5px;
-        }
-        .graph-container {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            width: 100%;
-            height: 500px;
-        }
-    </style>
+<meta name="generator" content=
+"HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+<meta http-equiv="Content-type" content=
+"text/html; charset=us-ascii">
+<title>Graph from a matrix</title>
+
+<script type="text/javascript" src=
+"http://mbostock.github.com/d3/d3.js?1.29.1">
+</script>
+<script type="text/javascript" src=
+"http://mbostock.github.com/d3/d3.geom.js?1.29.1">
+</script>
+<script type="text/javascript" src=
+"http://mbostock.github.com/d3/d3.layout.js?1.29.1">
+</script>
+<script type="text/javascript" src=
+"http://www.numericjs.com/lib/numeric-1.0.2.min.js">
+</script>
+<style type="text/css">
+
+path.link {
+  fill: none;
+  stroke: #111;
+  stroke-width: 1.5px;
+}
+
+marker#licensing {
+  fill: green;
+}
+
+path.link.licensing {
+  stroke: green;
+}
+
+path.link.resolved {
+  stroke-dasharray: 0,2 1;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+circle.self-loop {
+  display: none;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+text.self-loop {
+  display: none;
+}
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .8;
+}
+
+</style>
 </head>
 <body>
-    <h1>Adjacency Matrix to Graph</h1>
+<form action=""><input id="expressionA" name="expression" onchange=
+"compute(this.value)" size="100%" value=
+"a=[[0,1,0,0,0],[0,0,1,0,0],[1,0,0,0,1],[0,1,0,0,0],[0,0,0,1,0]]; matrixPow(a,4)"></form>
+<script type="text/javascript">
 
-    <label for="matrix-size">Matrix Size:</label>
-    <input type="number" id="matrix-size" min="2" max="10">
-    <button onclick="createMatrixInput()">Generate Matrix</button>
+function compute(expr){
+  matrix = eval(expr);
+  draw(matrix);
+}
 
-    <table id="matrix-container" class="matrix-table"></table>
-    <button onclick="generateGraph()" style="margin-top: 20px;">Generate Graph</button>
+function draw(matrix){
+var links = [];
 
-    <div id="graph-container" class="graph-container"></div>
+for(m=0;m< matrix.length;m++) {
+  a = matrix[m];
+  for(n=0;n< a.length;n++) {
+    if (a[n]>0) {
+		if (n!=m) {
+			links.push( {
+				source: String(m+1),
+				target: String(n+1),
+				type: String(a[n]) 
+			});
+		} else {
+			// These are for rendering self reference.  The 'null' vertex is a secret extra vertex.
+			links.push( {
+				source: String(m+1)+"-null",
+				target: String(m+1),
+				type: "self-loop" 
+			});
+		}
+    }  
+  }
+}
 
-    <script>
-        function createMatrixInput() {
-            const size = parseInt(document.getElementById('matrix-size').value, 10);
-            const container = document.getElementById('matrix-container');
+var nodes = {};
 
-            if (!size || size < 2 || size > 10) {
-                alert("Please specify a matrix size between 2 and 10.");
-                return;
-            }
+// Compute the distinct nodes from the links.
+links.forEach(function(link) {
+  t = (link.type == "self-loop"?"self-loop": "basic");
+  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, type: t});
+  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+});
 
-            container.innerHTML = ''; // Clear any existing matrix
+var w = 960,
+    h = 500;
 
-            // Generate a table-like grid for the matrix
-            for (let i = 0; i < size; i++) {
-                const row = document.createElement('tr');
-                for (let j = 0; j < size; j++) {
-                    const cell = document.createElement('td');
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    input.min = '0';
-                    input.max = '1';
-                    input.value = '0';
-                    input.id = `cell-${i}-${j}`;
-                    cell.appendChild(input);
-                    row.appendChild(cell);
-                }
-                container.appendChild(row);
-            }
-        }
+var force = d3.layout.force()
+    .nodes(d3.values(nodes))
+    .links(links)
+    .linkStrength(function(d) { return (d.type == "self-loop"? 1 : 0.5); })
+    .size([w, h])
+    .linkDistance(function(d) { return (d.type == "self-loop"? 20 : 150); })
+    .charge(-1200)
+    .gravity(0.3)
+    .on("tick", tick)
+    .start();
 
-        function generateGraph() {
-            const size = parseInt(document.getElementById('matrix-size').value, 10);
-            if (!size || size < 2) {
-                alert("Please specify and generate the adjacency matrix first.");
-                return;
-            }
+oldsvgs = document.getElementsByTagName("svg");
+for (i=0;i<oldsvgs.length;i++) {
+  oldsvgs[i].parentNode.removeChild(oldsvgs[i]);
+}
 
-            const matrix = [];
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
 
-            for (let i = 0; i < size; i++) {
-                const row = [];
-                for (let j = 0; j < size; j++) {
-                    const value = document.getElementById(`cell-${i}-${j}`).value || 0;
-                    row.push(parseInt(value, 10));
-                }
-                matrix.push(row);
-            }
+// Per-type markers, as they don't inherit styles.
+svg.append("svg:defs").selectAll("marker")
+    .data(["basic"])
+  .enter().append("svg:marker")
+    .attr("id", String)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 20)
+    .attr("refY", -1.5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("svg:path")
+    .attr("d", "M0,-5L10,0L0,5");
 
-            renderGraph(matrix);
-        }
+var path = svg.append("svg:g").selectAll("path")
+    .data(force.links())
+  .enter().append("svg:path")
+    .attr("class", function(d) { return "link " + d.type; })
+    .attr("marker-end", "url(#basic)");
 
-        function renderGraph(matrix) {
-            const nodes = [];
-            const links = [];
+var circle = svg.append("svg:g").selectAll("circle")
+    .data(force.nodes())
+  .enter().append("svg:circle")
+    .attr("r", 10)
+    .call(force.drag)
+    .attr("class",function(d){ return d.type });
 
-            const size = matrix.length;
-            for (let i = 0; i < size; i++) {
-                nodes.push({ id: i });
-                for (let j = 0; j < size; j++) {
-                    if (matrix[i][j] !== 0) {
-                        links.push({ source: i, target: j, value: matrix[i][j] });
-                    }
-                }
-            }
+var text = svg.append("svg:g").selectAll("g")
+    .data(force.nodes())
+    .enter().append("svg:g")
+    .attr("class",function(d){ return d.type });
 
-            // Clear the previous graph
-            document.getElementById('graph-container').innerHTML = '';
 
-            const width = document.getElementById('graph-container').clientWidth;
-            const height = document.getElementById('graph-container').clientHeight;
+// A copy of the text with a thick white stroke for legitimacy.
+text.append("svg:text")
+    .attr("x", 0)
+    .attr("y", ".31em")
+    .attr("class", "shadow")
+    .attr("class",function(d){ return d.type })
+    .text(function(d) { return d.name; });
+    
 
-            const svg = d3.select('#graph-container')
-                          .append('svg')
-                          .attr('width', width)
-                          .attr('height', height);
+text.append("svg:text")
+    .attr("x", 0)
+    .attr("y", ".31em")
+    .attr("class",function(d){ return d.type })
+    .text(function(d) { return d.name; });
 
-            const simulation = d3.forceSimulation(nodes)
-                                 .force('link', d3.forceLink(links).id(d => d.id).distance(100))
-                                 .force('charge', d3.forceManyBody().strength(-400))
-                                 .force('center', d3.forceCenter(width / 2, height / 2));
+function tick() {
+  path.attr("d", function(d) {
+    if (d.type != "self-loop") {
+      // Use elliptical arc path segments to doubly-encode directionality.
+      var dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y,
+          dr = Math.sqrt(dx * dx + dy * dy);
+      return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    } else if (d.type == "self-loop") {
+      // draw a little loop back to the self, keeping in mind that all self loops from the dummy node toward the self.
+      var dx = d.source.x - d.target.x,
+          dy = d.source.y - d.target.y,
+          dr = Math.sqrt(dx * dx + dy * dy);
+          a = Math.atan2(dx,dy);
+          da = 0.4;
+          b = 1;
+      return "M" + d.target.x + "," + d.target.y + "q" +
+        b*dr*numeric.sin(a) + "," + b*dr*numeric.cos(a) + " " +
+        b*dr*numeric.sin(a+da) + "," + b*dr*numeric.cos(a+da) + " " +  " T " + d.target.x + "," + d.target.y;      
+    }
+  });
 
-            const link = svg.append('g')
-                            .selectAll('line')
-                            .data(links)
-                            .enter()
-                            .append('line')
-                            .attr('stroke', '#999')
-                            .attr('stroke-width', d => Math.sqrt(d.value));
+  circle.attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
 
-            const node = svg.append('g')
-                            .selectAll('circle')
-                            .data(nodes)
-                            .enter()
-                            .append('circle')
-                            .attr('r', 10)
-                            .attr('fill', 'lightblue')
-                            .call(d3.drag()
-                                    .on('start', dragstarted)
-                                    .on('drag', dragged)
-                                    .on('end', dragended));
+  text.attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
+}
+}
 
-            const label = svg.append('g')
-                             .selectAll('text')
-                             .data(nodes)
-                             .enter()
-                             .append('text')
-                             .text(d => d.id)
-                             .attr('font-size', 12)
-                             .attr('dx', 15)
-                             .attr('dy', 4);
+// extra functions
 
-            simulation.on('tick', () => {
-                link.attr('x1', d => d.source.x)
-                    .attr('y1', d => d.source.y)
-                    .attr('x2', d => d.target.x)
-                    .attr('y2', d => d.target.y);
+function matrixPow(m,p) {
+  if(p==0) return numeric.identity(m[0].length);
+  a = m;
+  for (i=0;i<p-1;i++) {
+    a = numeric.dot(a,m);
+  }
+  return a;
+}
 
-                node.attr('cx', d => d.x)
-                    .attr('cy', d => d.y);
+function getParameterByName(name)
+{
+  // to get the parameters for the expression
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.search);
+  if(results == null)
+    return "";
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
-                label.attr('x', d => d.x)
-                     .attr('y', d => d.y);
-            });
+input = document.getElementById("expressionA");
+pExpression = getParameterByName("expression");
+if (pExpression) input.value = pExpression;
+compute(document.getElementById("expressionA").value);
 
-            function dragstarted(event, d) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-
-            function dragged(event, d) {
-                d.fx = event.x;
-                d.fy = event.y;
-            }
-
-            function dragended(event, d) {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-            }
-        }
-    </script>
+</script>
 </body>
 </html>
