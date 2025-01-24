@@ -14,185 +14,188 @@ author_profile: false
 <script src="https://d3js.org/d3.v4.js"></script>
 
 <script type="text/javascript">
-    let matrix = [];
+    // This ensures the script runs after the page is fully loaded
+    window.onload = function() {
+        let matrix = [];
 
-    function generateMatrix() {
-        const size = parseInt(document.getElementById("matrix-size").value, 10);
-        if (!size || size < 2 || size > 10) {
-            alert("Please enter a matrix size between 2 and 10.");
-            return;
-        }
-
-        const container = document.getElementById("matrix-inputs");
-        container.innerHTML = "";
-
-        const table = document.createElement("table");
-        for (let i = 0; i < size; i++) {
-            const row = document.createElement("tr");
-            matrix[i] = [];
-            for (let j = 0; j < size; j++) {
-                const cell = document.createElement("td");
-                const input = document.createElement("input");
-                input.type = "number";
-                input.min = "0";
-                input.max = "1";
-                input.value = "0";
-                input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
-                cell.appendChild(input);
-                row.appendChild(cell);
-                matrix[i][j] = 0;
+        function generateMatrix() {
+            const size = parseInt(document.getElementById("matrix-size").value, 10);
+            if (!size || size < 2 || size > 10) {
+                alert("Please enter a matrix size between 2 and 10.");
+                return;
             }
-            table.appendChild(row);
+
+            const container = document.getElementById("matrix-inputs");
+            container.innerHTML = "";
+
+            const table = document.createElement("table");
+            for (let i = 0; i < size; i++) {
+                const row = document.createElement("tr");
+                matrix[i] = [];
+                for (let j = 0; j < size; j++) {
+                    const cell = document.createElement("td");
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.min = "0";
+                    input.max = "1";
+                    input.value = "0";
+                    input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+            container.appendChild(table);
         }
-        container.appendChild(table);
-    }
 
-    function generateGraph() {
-        if (!matrix || matrix.length === 0) {
-            alert("Please generate and fill in the adjacency matrix first.");
-            return;
+        function generateGraph() {
+            if (!matrix || matrix.length === 0) {
+                alert("Please generate and fill in the adjacency matrix first.");
+                return;
+            }
+
+            draw(matrix);
         }
 
-        draw(matrix);
-    }
-
-    function draw(matrix) {
-        const links = [];
-        for (let m = 0; m < matrix.length; m++) {
-            for (let n = 0; n < matrix[m].length; n++) {
-                if (matrix[m][n] > 0) {
-                    links.push({
-                        source: String(m + 1),
-                        target: String(n + 1),
-                        type: "basic",
-                        selfLoop: m === n // Check for self-loop
-                    });
+        function draw(matrix) {
+            const links = [];
+            for (let m = 0; m < matrix.length; m++) {
+                for (let n = 0; n < matrix[m].length; n++) {
+                    if (matrix[m][n] > 0) {
+                        links.push({
+                            source: String(m + 1),
+                            target: String(n + 1),
+                            type: "basic",
+                            selfLoop: m === n // Check for self-loop
+                        });
+                    }
                 }
             }
-        }
 
-        const nodes = {};
-        links.forEach((link) => {
-            link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
-            link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
-        });
-
-        const width = 960,
-            height = 500;
-
-        // Apply forces with collision detection and increased link distance
-        const force = d3.forceSimulation(d3.values(nodes))
-            .force("link", d3.forceLink(links).id(d => d.name).distance(200))  // Increased link distance
-            .force("charge", d3.forceManyBody().strength(-300))  // Adjusted charge for better separation
-            .force("center", d3.forceCenter(width / 2, height / 2))
-            .force("collide", d3.forceCollide().radius(30));  // Add collision detection to avoid node overlap
-
-        document.querySelectorAll("svg").forEach((svg) => svg.remove());
-
-        const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
-
-        const path = svg
-            .append("g")
-            .selectAll("path")
-            .data(links)
-            .enter()
-            .append("path")
-            .attr("class", "link")
-            .attr("fill", "none")
-            .attr("stroke", "#ccc")
-            .attr("stroke-width", 2);
-
-        const circle = svg
-            .append("g")
-            .selectAll("circle")
-            .data(d3.values(nodes))
-            .enter()
-            .append("circle")
-            .attr("r", 10)
-            .call(d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended));
-
-        const text = svg
-            .append("g")
-            .selectAll("text")
-            .data(d3.values(nodes))
-            .enter()
-            .append("text")
-            .attr("x", 12)
-            .attr("y", ".31em")
-            .attr("text-anchor", "middle")
-            .attr("dy", -15)
-            .text(d => d.name);
-
-        force.on("tick", function () {
-            path.attr("d", function (d) {
-                if (d.selfLoop) {
-                    // Consistent size for all self-loops
-                    const rx = 25;  // Horizontal radius (fixed size for all loops)
-                    const ry = 15;  // Vertical radius (fixed size for all loops)
-                    const dx = d.source.x;
-                    const dy = d.source.y;
-                    
-                    // Calculate the angle of the outward direction from the center of the graph
-                    const centerX = width / 2;
-                    const centerY = height / 2;
-                    const angle = Math.atan2(dy - centerY, dx - centerX);
-                    
-                    // Adjust the position of the arc to point outward, with a fixed offset
-                    const loopX = dx + Math.cos(angle) * 50;  // Outward offset (50px)
-                    const loopY = dy + Math.sin(angle) * 50;
-
-                    // Ensure the loop stays within the SVG bounds (limit the position)
-                    const boundedLoopX = Math.max(50, Math.min(width - 50, loopX)); // Stay within the frame
-                    const boundedLoopY = Math.max(50, Math.min(height - 50, loopY)); // Stay within the frame
-
-                    // Return the self-loop arc that connects back to the node
-                    return `M${dx},${dy}A${rx},${ry} 0 0,1 ${boundedLoopX},${boundedLoopY}A${rx},${ry} 0 0,1 ${dx},${dy}`; // Outward loop arc
-                } else {
-                    // Regular link between nodes
-                    const dx = d.target.x - d.source.x,
-                        dy = d.target.y - d.source.y,
-                        dr = Math.sqrt(dx * dx + dy * dy);
-                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-                }
+            const nodes = {};
+            links.forEach((link) => {
+                link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
+                link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
             });
 
-            circle.attr("transform", (d) => {
-                d.x = Math.max(10, Math.min(width - 10, d.x));
-                d.y = Math.max(10, Math.min(height - 10, d.y));
-                return `translate(${d.x},${d.y})`;
+            const width = 960,
+                height = 500;
+
+            // Apply forces with collision detection and increased link distance
+            const force = d3.forceSimulation(d3.values(nodes))
+                .force("link", d3.forceLink(links).id(d => d.name).distance(200))  // Increased link distance
+                .force("charge", d3.forceManyBody().strength(-300))  // Adjusted charge for better separation
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("collide", d3.forceCollide().radius(30));  // Add collision detection to avoid node overlap
+
+            document.querySelectorAll("svg").forEach((svg) => svg.remove());
+
+            const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+
+            const path = svg
+                .append("g")
+                .selectAll("path")
+                .data(links)
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("fill", "none")
+                .attr("stroke", "#ccc")
+                .attr("stroke-width", 2);
+
+            const circle = svg
+                .append("g")
+                .selectAll("circle")
+                .data(d3.values(nodes))
+                .enter()
+                .append("circle")
+                .attr("r", 10)
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            const text = svg
+                .append("g")
+                .selectAll("text")
+                .data(d3.values(nodes))
+                .enter()
+                .append("text")
+                .attr("x", 12)
+                .attr("y", ".31em")
+                .attr("text-anchor", "middle")
+                .attr("dy", -15)
+                .text(d => d.name);
+
+            force.on("tick", function () {
+                path.attr("d", function (d) {
+                    if (d.selfLoop) {
+                        // Consistent size for all self-loops
+                        const rx = 25;  // Horizontal radius (fixed size for all loops)
+                        const ry = 15;  // Vertical radius (fixed size for all loops)
+                        const dx = d.source.x;
+                        const dy = d.source.y;
+                        
+                        // Calculate the angle of the outward direction from the center of the graph
+                        const centerX = width / 2;
+                        const centerY = height / 2;
+                        const angle = Math.atan2(dy - centerY, dx - centerX);
+                        
+                        // Adjust the position of the arc to point outward, with a fixed offset
+                        const loopX = dx + Math.cos(angle) * 50;  // Outward offset (50px)
+                        const loopY = dy + Math.sin(angle) * 50;
+
+                        // Ensure the loop stays within the SVG bounds (limit the position)
+                        const boundedLoopX = Math.max(50, Math.min(width - 50, loopX)); // Stay within the frame
+                        const boundedLoopY = Math.max(50, Math.min(height - 50, loopY)); // Stay within the frame
+
+                        // Return the self-loop arc that connects back to the node
+                        return `M${dx},${dy}A${rx},${ry} 0 0,1 ${boundedLoopX},${boundedLoopY}A${rx},${ry} 0 0,1 ${dx},${dy}`; // Outward loop arc
+                    } else {
+                        // Regular link between nodes
+                        const dx = d.target.x - d.source.x,
+                            dy = d.target.y - d.source.y,
+                            dr = Math.sqrt(dx * dx + dy * dy);
+                        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                    }
+                });
+
+                circle.attr("transform", (d) => {
+                    d.x = Math.max(10, Math.min(width - 10, d.x));
+                    d.y = Math.max(10, Math.min(height - 10, d.y));
+                    return `translate(${d.x},${d.y})`;
+                });
+
+                text.attr("transform", (d) => {
+                    // Ensure the label stays within the frame
+                    d.x = Math.max(10, Math.min(width - 10, d.x));
+                    d.y = Math.max(10, Math.min(height - 10, d.y));
+
+                    // Adjust the label's vertical position to avoid overlap with nodes
+                    const dyAdjustment = d.y < height / 2 ? -15 : 15;  // Position above or below node based on the node's vertical position
+                    return `translate(${d.x},${d.y + dyAdjustment})`;
+                });
             });
 
-            text.attr("transform", (d) => {
-                // Ensure the label stays within the frame
-                d.x = Math.max(10, Math.min(width - 10, d.x));
-                d.y = Math.max(10, Math.min(height - 10, d.y));
+            function dragstarted(event, d) {
+                if (!event.active) force.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
 
-                // Adjust the label's vertical position to avoid overlap with nodes
-                const dyAdjustment = d.y < height / 2 ? -15 : 15;  // Position above or below node based on the node's vertical position
-                return `translate(${d.x},${d.y + dyAdjustment})`;
-            });
-        });
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
 
-        function dragstarted(event, d) {
-            if (!event.active) force.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
+            function dragended(event, d) {
+                if (!event.active) force.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
         }
 
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
-        }
-
-        function dragended(event, d) {
-            if (!event.active) force.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        }
-    }
-
-    generateMatrix();
+        // Initialize the matrix and graph generation on page load
+        generateMatrix();
+    };
 </script>
