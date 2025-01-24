@@ -6,248 +6,175 @@ author_profile: false
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
-<meta name="generator" content=
-"HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
-<meta http-equiv="Content-type" content=
-"text/html; charset=us-ascii">
-<title>Graph from a matrix</title>
+    <meta http-equiv="Content-type" content="text/html; charset=us-ascii">
+    <title>Graph from a Matrix</title>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.29.1"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.29.1"></script>
+    <script type="text/javascript" src="http://www.numericjs.com/lib/numeric-1.0.2.min.js"></script>
+    <style type="text/css">
+        path.link {
+            fill: none;
+            stroke: #111;
+            stroke-width: 1.5px;
+        }
 
-<script type="text/javascript" src=
-"http://mbostock.github.com/d3/d3.js?1.29.1">
-</script>
-<script type="text/javascript" src=
-"http://mbostock.github.com/d3/d3.geom.js?1.29.1">
-</script>
-<script type="text/javascript" src=
-"http://mbostock.github.com/d3/d3.layout.js?1.29.1">
-</script>
-<script type="text/javascript" src=
-"http://www.numericjs.com/lib/numeric-1.0.2.min.js">
-</script>
-<style type="text/css">
+        circle {
+            fill: #ccc;
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
 
-path.link {
-  fill: none;
-  stroke: #111;
-  stroke-width: 1.5px;
-}
+        text {
+            font: 10px sans-serif;
+            pointer-events: none;
+        }
 
-marker#licensing {
-  fill: green;
-}
+        .matrix-container {
+            margin-bottom: 20px;
+        }
 
-path.link.licensing {
-  stroke: green;
-}
-
-path.link.resolved {
-  stroke-dasharray: 0,2 1;
-}
-
-circle {
-  fill: #ccc;
-  stroke: #333;
-  stroke-width: 1.5px;
-}
-
-circle.self-loop {
-  display: none;
-}
-
-text {
-  font: 10px sans-serif;
-  pointer-events: none;
-}
-
-text.self-loop {
-  display: none;
-}
-
-text.shadow {
-  stroke: #fff;
-  stroke-width: 3px;
-  stroke-opacity: .8;
-}
-
-</style>
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<form action=""><input id="expressionA" name="expression" onchange=
-"compute(this.value)" size="100%" value=
-"a=[[0,1,0,0,0],[0,0,1,0,0],[1,0,0,0,1],[0,1,0,0,0],[0,0,0,1,0]]; matrixPow(a,4)"></form>
-<script type="text/javascript">
+    <h1>Graph from a Matrix</h1>
 
-function compute(expr){
-  matrix = eval(expr);
-  draw(matrix);
-}
+    <div class="matrix-container">
+        <label for="matrix-size">Matrix Size:</label>
+        <input type="number" id="matrix-size" min="2" max="10" value="4">
+        <button onclick="generateMatrix()">Generate Matrix</button>
+        <div id="matrix-inputs"></div>
+        <button onclick="generateGraph()">Generate Graph</button>
+    </div>
 
-function draw(matrix){
-var links = [];
+    <script type="text/javascript">
+        let matrix = [];
 
-for(m=0;m< matrix.length;m++) {
-  a = matrix[m];
-  for(n=0;n< a.length;n++) {
-    if (a[n]>0) {
-		if (n!=m) {
-			links.push( {
-				source: String(m+1),
-				target: String(n+1),
-				type: String(a[n]) 
-			});
-		} else {
-			// These are for rendering self reference.  The 'null' vertex is a secret extra vertex.
-			links.push( {
-				source: String(m+1)+"-null",
-				target: String(m+1),
-				type: "self-loop" 
-			});
-		}
-    }  
-  }
-}
+        function generateMatrix() {
+            const size = parseInt(document.getElementById("matrix-size").value, 10);
+            if (!size || size < 2 || size > 10) {
+                alert("Please enter a matrix size between 2 and 10.");
+                return;
+            }
 
-var nodes = {};
+            const container = document.getElementById("matrix-inputs");
+            container.innerHTML = ""; // Clear previous matrix
 
-// Compute the distinct nodes from the links.
-links.forEach(function(link) {
-  t = (link.type == "self-loop"?"self-loop": "basic");
-  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, type: t});
-  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-});
+            const table = document.createElement("table");
+            for (let i = 0; i < size; i++) {
+                const row = document.createElement("tr");
+                matrix[i] = [];
+                for (let j = 0; j < size; j++) {
+                    const cell = document.createElement("td");
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.min = "0";
+                    input.max = "1";
+                    input.value = "0";
+                    input.style.width = "40px";
+                    input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                    matrix[i][j] = 0; // Initialize with zeros
+                }
+                table.appendChild(row);
+            }
+            container.appendChild(table);
+        }
 
-var w = 960,
-    h = 500;
+        function generateGraph() {
+            if (!matrix || matrix.length === 0) {
+                alert("Please generate and fill in the adjacency matrix first.");
+                return;
+            }
 
-var force = d3.layout.force()
-    .nodes(d3.values(nodes))
-    .links(links)
-    .linkStrength(function(d) { return (d.type == "self-loop"? 1 : 0.5); })
-    .size([w, h])
-    .linkDistance(function(d) { return (d.type == "self-loop"? 20 : 150); })
-    .charge(-1200)
-    .gravity(0.3)
-    .on("tick", tick)
-    .start();
+            draw(matrix);
+        }
 
-oldsvgs = document.getElementsByTagName("svg");
-for (i=0;i<oldsvgs.length;i++) {
-  oldsvgs[i].parentNode.removeChild(oldsvgs[i]);
-}
+        function draw(matrix) {
+            const links = [];
+            for (let m = 0; m < matrix.length; m++) {
+                for (let n = 0; n < matrix[m].length; n++) {
+                    if (matrix[m][n] > 0) {
+                        links.push({
+                            source: String(m + 1),
+                            target: String(n + 1),
+                            type: "basic",
+                        });
+                    }
+                }
+            }
 
-var svg = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
+            const nodes = {};
+            links.forEach((link) => {
+                link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
+                link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+            });
 
-// Per-type markers, as they don't inherit styles.
-svg.append("svg:defs").selectAll("marker")
-    .data(["basic"])
-  .enter().append("svg:marker")
-    .attr("id", String)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 20)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("svg:path")
-    .attr("d", "M0,-5L10,0L0,5");
+            const width = 960,
+                height = 500;
 
-var path = svg.append("svg:g").selectAll("path")
-    .data(force.links())
-  .enter().append("svg:path")
-    .attr("class", function(d) { return "link " + d.type; })
-    .attr("marker-end", "url(#basic)");
+            const force = d3.layout
+                .force()
+                .nodes(d3.values(nodes))
+                .links(links)
+                .size([width, height])
+                .linkDistance(150)
+                .charge(-500)
+                .on("tick", tick)
+                .start();
 
-var circle = svg.append("svg:g").selectAll("circle")
-    .data(force.nodes())
-  .enter().append("svg:circle")
-    .attr("r", 10)
-    .call(force.drag)
-    .attr("class",function(d){ return d.type });
+            document.querySelectorAll("svg").forEach((svg) => svg.remove());
 
-var text = svg.append("svg:g").selectAll("g")
-    .data(force.nodes())
-    .enter().append("svg:g")
-    .attr("class",function(d){ return d.type });
+            const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
 
+            const path = svg
+                .append("g")
+                .selectAll("path")
+                .data(force.links())
+                .enter()
+                .append("path")
+                .attr("class", "link");
 
-// A copy of the text with a thick white stroke for legitimacy.
-text.append("svg:text")
-    .attr("x", 0)
-    .attr("y", ".31em")
-    .attr("class", "shadow")
-    .attr("class",function(d){ return d.type })
-    .text(function(d) { return d.name; });
-    
+            const circle = svg
+                .append("g")
+                .selectAll("circle")
+                .data(force.nodes())
+                .enter()
+                .append("circle")
+                .attr("r", 10)
+                .call(force.drag);
 
-text.append("svg:text")
-    .attr("x", 0)
-    .attr("y", ".31em")
-    .attr("class",function(d){ return d.type })
-    .text(function(d) { return d.name; });
+            const text = svg
+                .append("g")
+                .selectAll("text")
+                .data(force.nodes())
+                .enter()
+                .append("text")
+                .attr("x", 12)
+                .attr("y", ".31em")
+                .text((d) => d.name);
 
-function tick() {
-  path.attr("d", function(d) {
-    if (d.type != "self-loop") {
-      // Use elliptical arc path segments to doubly-encode directionality.
-      var dx = d.target.x - d.source.x,
-          dy = d.target.y - d.source.y,
-          dr = Math.sqrt(dx * dx + dy * dy);
-      return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-    } else if (d.type == "self-loop") {
-      // draw a little loop back to the self, keeping in mind that all self loops from the dummy node toward the self.
-      var dx = d.source.x - d.target.x,
-          dy = d.source.y - d.target.y,
-          dr = Math.sqrt(dx * dx + dy * dy);
-          a = Math.atan2(dx,dy);
-          da = 0.4;
-          b = 1;
-      return "M" + d.target.x + "," + d.target.y + "q" +
-        b*dr*numeric.sin(a) + "," + b*dr*numeric.cos(a) + " " +
-        b*dr*numeric.sin(a+da) + "," + b*dr*numeric.cos(a+da) + " " +  " T " + d.target.x + "," + d.target.y;      
-    }
-  });
+            function tick() {
+                path.attr("d", function (d) {
+                    const dx = d.target.x - d.source.x,
+                        dy = d.target.y - d.source.y,
+                        dr = Math.sqrt(dx * dx + dy * dy);
+                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                });
 
-  circle.attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
+                circle.attr("transform", (d) => `translate(${d.x},${d.y})`);
 
-  text.attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
-}
-}
+                text.attr("transform", (d) => `translate(${d.x},${d.y})`);
+            }
+        }
 
-// extra functions
-
-function matrixPow(m,p) {
-  if(p==0) return numeric.identity(m[0].length);
-  a = m;
-  for (i=0;i<p-1;i++) {
-    a = numeric.dot(a,m);
-  }
-  return a;
-}
-
-function getParameterByName(name)
-{
-  // to get the parameters for the expression
-  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-  var regexS = "[\\?&]" + name + "=([^&#]*)";
-  var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.search);
-  if(results == null)
-    return "";
-  else
-    return decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
-input = document.getElementById("expressionA");
-pExpression = getParameterByName("expression");
-if (pExpression) input.value = pExpression;
-compute(document.getElementById("expressionA").value);
-
-</script>
+        // Initialize with a 4x4 matrix
+        generateMatrix();
+    </script>
 </body>
 </html>
