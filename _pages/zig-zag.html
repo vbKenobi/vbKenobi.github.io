@@ -25,12 +25,11 @@ author_profile: false
       stroke-width: 1.5px;
     }
   </style>
-  <!-- Load D3.js -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
   <svg></svg>
   <script>
+    import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
     // Define the graph data
     const graph = {
       nodes: [
