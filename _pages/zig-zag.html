@@ -1,0 +1,175 @@
+---
+title: "Zig Zag Simulator"
+permalink: /zigZag/
+author_profile: false
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjacency Matrix to Graph</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        input[type="number"] {
+            width: 40px;
+            margin: 2px;
+        }
+        .graph-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Adjacency Matrix to Graph</h1>
+
+    <label for="matrix-size">Matrix Size:</label>
+    <input type="number" id="matrix-size" min="2" max="10">
+    <button onclick="createMatrixInput()">Generate Matrix</button>
+
+    <div id="matrix-container" style="margin-top: 20px;"></div>
+    <button onclick="generateGraph()" style="margin-top: 20px;">Generate Graph</button>
+
+    <div id="graph-container" class="graph-container"></div>
+
+    <script>
+        function createMatrixInput() {
+            const size = document.getElementById('matrix-size').value;
+            const container = document.getElementById('matrix-container');
+
+            if (!size) {
+                alert("Please specify a size for the matrix.");
+                return;
+            }
+
+            container.innerHTML = '';
+
+            for (let i = 0; i < size; i++) {
+                const rowDiv = document.createElement('div');
+                for (let j = 0; j < size; j++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.id = `cell-${i}-${j}`;
+                    input.style.width = '40px';
+                    rowDiv.appendChild(input);
+                }
+                container.appendChild(rowDiv);
+            }
+        }
+
+        function generateGraph() {
+            const size = document.getElementById('matrix-size').value;
+            const matrix = [];
+
+            for (let i = 0; i < size; i++) {
+                const row = [];
+                for (let j = 0; j < size; j++) {
+                    const value = document.getElementById(`cell-${i}-${j}`).value || 0;
+                    row.push(parseInt(value));
+                }
+                matrix.push(row);
+            }
+
+            renderGraph(matrix);
+        }
+
+        function renderGraph(matrix) {
+            const nodes = [];
+            const links = [];
+
+            const size = matrix.length;
+            for (let i = 0; i < size; i++) {
+                nodes.push({ id: i });
+                for (let j = 0; j < size; j++) {
+                    if (matrix[i][j] !== 0) {
+                        links.push({ source: i, target: j, value: matrix[i][j] });
+                    }
+                }
+            }
+
+            // Clear the previous graph
+            document.getElementById('graph-container').innerHTML = '';
+
+            const width = document.getElementById('graph-container').clientWidth;
+            const height = document.getElementById('graph-container').clientHeight;
+
+            const svg = d3.select('#graph-container')
+                          .append('svg')
+                          .attr('width', width)
+                          .attr('height', height);
+
+            const simulation = d3.forceSimulation(nodes)
+                                 .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+                                 .force('charge', d3.forceManyBody().strength(-400))
+                                 .force('center', d3.forceCenter(width / 2, height / 2));
+
+            const link = svg.append('g')
+                            .selectAll('line')
+                            .data(links)
+                            .enter()
+                            .append('line')
+                            .attr('stroke', '#999')
+                            .attr('stroke-width', d => Math.sqrt(d.value));
+
+            const node = svg.append('g')
+                            .selectAll('circle')
+                            .data(nodes)
+                            .enter()
+                            .append('circle')
+                            .attr('r', 10)
+                            .attr('fill', 'lightblue')
+                            .call(d3.drag()
+                                    .on('start', dragstarted)
+                                    .on('drag', dragged)
+                                    .on('end', dragended));
+
+            const label = svg.append('g')
+                             .selectAll('text')
+                             .data(nodes)
+                             .enter()
+                             .append('text')
+                             .text(d => d.id)
+                             .attr('font-size', 12)
+                             .attr('dx', 15)
+                             .attr('dy', 4);
+
+            simulation.on('tick', () => {
+                link.attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+
+                label.attr('x', d => d.x)
+                     .attr('y', d => d.y);
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+    </script>
+</body>
+</html>
