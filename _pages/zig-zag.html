@@ -65,6 +65,7 @@ author_profile: false
                         source: String(m + 1),
                         target: String(n + 1),
                         type: "basic",
+                        selfLoop: m === n // Check for self-loop
                     });
                 }
             }
@@ -94,7 +95,10 @@ author_profile: false
             .data(links)
             .enter()
             .append("path")
-            .attr("class", "link");
+            .attr("class", "link")
+            .attr("fill", "none")
+            .attr("stroke", "#ccc")
+            .attr("stroke-width", 2);
 
         const circle = svg
             .append("g")
@@ -116,19 +120,58 @@ author_profile: false
             .append("text")
             .attr("x", 12)
             .attr("y", ".31em")
+            .attr("text-anchor", "middle")
+            .attr("dy", -15)
             .text(d => d.name);
 
         force.on("tick", function () {
             path.attr("d", function (d) {
-                const dx = d.target.x - d.source.x,
-                    dy = d.target.y - d.source.y,
-                    dr = Math.sqrt(dx * dx + dy * dy);
-                return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                if (d.selfLoop) {
+                    // Consistent size for all self-loops
+                    const rx = 25;  // Horizontal radius (fixed size for all loops)
+                    const ry = 15;  // Vertical radius (fixed size for all loops)
+                    const dx = d.source.x;
+                    const dy = d.source.y;
+                    
+                    // Calculate the angle of the outward direction from the center of the graph
+                    const centerX = width / 2;
+                    const centerY = height / 2;
+                    const angle = Math.atan2(dy - centerY, dx - centerX);
+                    
+                    // Adjust the position of the arc to point outward, with a fixed offset
+                    const loopX = dx + Math.cos(angle) * 50;  // Outward offset (50px)
+                    const loopY = dy + Math.sin(angle) * 50;
+
+                    // Ensure the loop stays within the SVG bounds (limit the position)
+                    const boundedLoopX = Math.max(50, Math.min(width - 50, loopX)); // Stay within the frame
+                    const boundedLoopY = Math.max(50, Math.min(height - 50, loopY)); // Stay within the frame
+
+                    // Return the self-loop arc that connects back to the node
+                    return `M${dx},${dy}A${rx},${ry} 0 0,1 ${boundedLoopX},${boundedLoopY}A${rx},${ry} 0 0,1 ${dx},${dy}`; // Outward loop arc
+                } else {
+                    // Regular link between nodes
+                    const dx = d.target.x - d.source.x,
+                        dy = d.target.y - d.source.y,
+                        dr = Math.sqrt(dx * dx + dy * dy);
+                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                }
             });
 
-            circle.attr("transform", (d) => `translate(${d.x},${d.y})`);
+            circle.attr("transform", (d) => {
+                d.x = Math.max(10, Math.min(width - 10, d.x));
+                d.y = Math.max(10, Math.min(height - 10, d.y));
+                return `translate(${d.x},${d.y})`;
+            });
 
-            text.attr("transform", (d) => `translate(${d.x},${d.y})`);
+            text.attr("transform", (d) => {
+                // Ensure the label stays within the frame
+                d.x = Math.max(10, Math.min(width - 10, d.x));
+                d.y = Math.max(10, Math.min(height - 10, d.y));
+
+                // Adjust the label's vertical position to avoid overlap with nodes
+                const dyAdjustment = d.y < height / 2 ? -15 : 15;  // Position above or below node based on the node's vertical position
+                return `translate(${d.x},${d.y + dyAdjustment})`;
+            });
         });
 
         function dragstarted(event, d) {
@@ -139,7 +182,7 @@ author_profile: false
 
         function dragged(event, d) {
             d.fx = event.x;
-            d.fy = event.y;
+            d.fy = event.y;xw
         }
 
         function dragended(event, d) {
@@ -148,6 +191,7 @@ author_profile: false
             d.fy = null;
         }
     }
+
 
     generateMatrix();
 </script>
