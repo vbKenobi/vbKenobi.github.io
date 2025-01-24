@@ -6,9 +6,9 @@ author_profile: false
 <div class="matrix-container">
     <label for="matrix-size">Matrix Size:</label>
     <input type="number" id="matrix-size" min="2" max="10" value="4">
-    <button onclick="generateMatrix()">Generate Matrix</button>
+    <button id="generate-matrix-button">Generate Matrix</button>
     <div id="matrix-inputs"></div>
-    <button onclick="generateGraph()">Generate Graph</button>
+    <button id="generate-graph-button">Generate Graph</button>
 </div>
 
 <script src="https://d3js.org/d3.v4.js"></script>
@@ -16,147 +16,152 @@ author_profile: false
 <script type="text/javascript">
     let matrix = [];
 
-    function generateMatrix() {
-        const size = parseInt(document.getElementById("matrix-size").value, 10);
-        if (!size || size < 2 || size > 10) {
-            alert("Please enter a matrix size between 2 and 10.");
-            return;
-        }
-
-        const container = document.getElementById("matrix-inputs");
-        container.innerHTML = "";
-
-        const table = document.createElement("table");
-        for (let i = 0; i < size; i++) {
-            const row = document.createElement("tr");
-            matrix[i] = [];
-            for (let j = 0; j < size; j++) {
-                const cell = document.createElement("td");
-                const input = document.createElement("input");
-                input.type = "number";
-                input.min = "0";
-                input.max = "1";
-                input.value = "0";
-                input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
-                cell.appendChild(input);
-                row.appendChild(cell);
-                matrix[i][j] = 0;
+    // Ensure the functions are loaded after the DOM is fully ready
+    document.addEventListener("DOMContentLoaded", function () {
+        // Generate Matrix Function
+        function generateMatrix() {
+            const size = parseInt(document.getElementById("matrix-size").value, 10);
+            if (!size || size < 2 || size > 10) {
+                alert("Please enter a matrix size between 2 and 10.");
+                return;
             }
-            table.appendChild(row);
+
+            const container = document.getElementById("matrix-inputs");
+            container.innerHTML = "";
+
+            const table = document.createElement("table");
+            for (let i = 0; i < size; i++) {
+                const row = document.createElement("tr");
+                matrix[i] = [];
+                for (let j = 0; j < size; j++) {
+                    const cell = document.createElement("td");
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.min = "0";
+                    input.max = "1";
+                    input.value = "0";
+                    input.onchange = (e) => (matrix[i][j] = parseInt(e.target.value, 10) || 0);
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                    matrix[i][j] = 0;
+                }
+                table.appendChild(row);
+            }
+            container.appendChild(table);
         }
-        container.appendChild(table);
-    }
 
-    function generateGraph() {
-        if (!matrix || matrix.length === 0) {
-            alert("Please generate and fill in the adjacency matrix first.");
-            return;
+        // Generate Graph Function
+        function generateGraph() {
+            if (!matrix || matrix.length === 0) {
+                alert("Please generate and fill in the adjacency matrix first.");
+                return;
+            }
+
+            draw(matrix);
         }
 
-        draw(matrix);
-    }
+        // Draw Function (Graph Rendering)
+        function draw(matrix) {
+            const links = [];
+            for (let m = 0; m < matrix.length; m++) {
+                for (let n = 0; n < matrix[m].length; n++) {
+                    if (matrix[m][n] > 0) {
+                        links.push({
+                            source: String(m + 1),
+                            target: String(n + 1),
+                            type: "basic",
+                        });
+                    }
+                }
+            }
 
-    function draw(matrix) {
-    const links = [];
-    for (let m = 0; m < matrix.length; m++) {
-        for (let n = 0; n < matrix[m].length; n++) {
-            if (matrix[m][n] > 0) {
-                links.push({
-                    source: String(m + 1),
-                    target: String(n + 1),
-                    type: "basic",
+            const nodes = {};
+            links.forEach((link) => {
+                link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
+                link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+            });
+
+            const width = 960, height = 500;
+
+            const force = d3.forceSimulation(d3.values(nodes))
+                .force("link", d3.forceLink(links).id(d => d.name).distance(150))
+                .force("charge", d3.forceManyBody().strength(-500))
+                .force("center", d3.forceCenter(width / 2, height / 2));
+
+            document.querySelectorAll("svg").forEach((svg) => svg.remove());
+
+            const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+
+            const path = svg
+                .append("g")
+                .selectAll("path")
+                .data(links)
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .style("fill", "none")
+                .style("stroke", "#999")
+                .style("stroke-width", 2);
+
+            const circle = svg
+                .append("g")
+                .selectAll("circle")
+                .data(d3.values(nodes))
+                .enter()
+                .append("circle")
+                .attr("r", 10)
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            const text = svg
+                .append("g")
+                .selectAll("text")
+                .data(d3.values(nodes))
+                .enter()
+                .append("text")
+                .attr("x", 12)
+                .attr("y", ".31em")
+                .text(d => d.name);
+
+            force.on("tick", function () {
+                path.attr("d", function (d) {
+                    const dx = d.target.x - d.source.x,
+                        dy = d.target.y - d.source.y,
+                        dr = Math.sqrt(dx * dx + dy * dy);
+                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
                 });
+
+                circle.attr("transform", (d) => {
+                    d.x = Math.max(10, Math.min(width - 10, d.x));
+                    d.y = Math.max(10, Math.min(height - 10, d.y));
+                    return `translate(${d.x},${d.y})`;
+                });
+
+                text.attr("transform", (d) => `translate(${d.x},${d.y})`);
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) force.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) force.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
             }
         }
-    }
 
-    const nodes = {};
-    links.forEach((link) => {
-        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
-        link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+        // Event Listeners for Buttons
+        document.getElementById('generate-matrix-button').addEventListener('click', generateMatrix);
+        document.getElementById('generate-graph-button').addEventListener('click', generateGraph);
     });
-
-    const width = 960,
-        height = 500;
-
-    const force = d3.forceSimulation(d3.values(nodes))
-        .force("link", d3.forceLink(links).id(d => d.name).distance(150))
-        .force("charge", d3.forceManyBody().strength(-500))
-        .force("center", d3.forceCenter(width / 2, height / 2));
-
-    document.querySelectorAll("svg").forEach((svg) => svg.remove());
-
-    const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
-
-    const path = svg
-        .append("g")
-        .selectAll("path")
-        .data(links)
-        .enter()
-        .append("path")
-        .attr("class", "link")
-        .style("fill", "none")
-        .style("stroke", "#999")
-        .style("stroke-width", 2);
-
-    const circle = svg
-        .append("g")
-        .selectAll("circle")
-        .data(d3.values(nodes))
-        .enter()
-        .append("circle")
-        .attr("r", 10)
-        .call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended));
-
-    const text = svg
-        .append("g")
-        .selectAll("text")
-        .data(d3.values(nodes))
-        .enter()
-        .append("text")
-        .attr("x", 12)
-        .attr("y", ".31em")
-        .text(d => d.name);
-
-    force.on("tick", function () {
-        path.attr("d", function (d) {
-            const dx = d.target.x - d.source.x,
-                dy = d.target.y - d.source.y,
-                dr = Math.sqrt(dx * dx + dy * dy);
-            // Make the edges look like arcs, not filled
-            return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
-        });
-
-        circle.attr("transform", (d) => {
-            // Constrain nodes within the bounds of the SVG
-            d.x = Math.max(10, Math.min(width - 10, d.x));
-            d.y = Math.max(10, Math.min(height - 10, d.y));
-            return `translate(${d.x},${d.y})`;
-        });
-
-        text.attr("transform", (d) => `translate(${d.x},${d.y})`);
-    });
-
-    function dragstarted(event, d) {
-        if (!event.active) force.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-        if (!event.active) force.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
-}
-
-    generateMatrix();
 </script>
