@@ -11,13 +11,7 @@ author_profile: false
     <button onclick="generateGraph()">Generate Graph</button>
 </div>
 
-<script src="https://mbostock.github.io/d3/d3.js?1.29.1"></script>
-<script src="https://mbostock.github.io/d3/d3.geom.js?1.29.1"></script>
-<script src="https://mbostock.github.io/d3/d3.layout.js?1.29.1"></script>
-<script src="https://www.numericjs.com/lib/numeric-1.0.2.min.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://www.numericjs.com/lib/numeric-1.0.2.min.js"></script>
-
+<script src="https://d3js.org/d3.v4.js"></script>
 
 <script type="text/javascript">
     let matrix = [];
@@ -85,15 +79,10 @@ author_profile: false
         const width = 960,
             height = 500;
 
-        const force = d3.layout
-            .force()
-            .nodes(d3.values(nodes))
-            .links(links)
-            .size([width, height])
-            .linkDistance(150)
-            .charge(-500)
-            .on("tick", tick)
-            .start();
+        const force = d3.forceSimulation(d3.values(nodes))
+            .force("link", d3.forceLink(links).id(d => d.name).distance(150))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("center", d3.forceCenter(width / 2, height / 2));
 
         document.querySelectorAll("svg").forEach((svg) => svg.remove());
 
@@ -102,7 +91,7 @@ author_profile: false
         const path = svg
             .append("g")
             .selectAll("path")
-            .data(force.links())
+            .data(links)
             .enter()
             .append("path")
             .attr("class", "link");
@@ -110,23 +99,26 @@ author_profile: false
         const circle = svg
             .append("g")
             .selectAll("circle")
-            .data(force.nodes())
+            .data(d3.values(nodes))
             .enter()
             .append("circle")
             .attr("r", 10)
-            .call(force.drag);
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
 
         const text = svg
             .append("g")
             .selectAll("text")
-            .data(force.nodes())
+            .data(d3.values(nodes))
             .enter()
             .append("text")
             .attr("x", 12)
             .attr("y", ".31em")
-            .text((d) => d.name);
+            .text(d => d.name);
 
-        function tick() {
+        force.on("tick", function () {
             path.attr("d", function (d) {
                 const dx = d.target.x - d.source.x,
                     dy = d.target.y - d.source.y,
@@ -137,6 +129,23 @@ author_profile: false
             circle.attr("transform", (d) => `translate(${d.x},${d.y})`);
 
             text.attr("transform", (d) => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event, d) {
+            if (!event.active) force.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) force.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
         }
     }
 
