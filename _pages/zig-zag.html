@@ -19,8 +19,12 @@ author_profile: false
             margin: 2px;
             text-align: center;
         }
-        .matrix-row {
-            display: flex;
+        .matrix-table {
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .matrix-table td {
+            padding: 5px;
         }
         .graph-container {
             margin-top: 20px;
@@ -37,40 +41,44 @@ author_profile: false
     <input type="number" id="matrix-size" min="2" max="10">
     <button onclick="createMatrixInput()">Generate Matrix</button>
 
-    <div id="matrix-container" style="margin-top: 20px;"></div>
+    <table id="matrix-container" class="matrix-table"></table>
     <button onclick="generateGraph()" style="margin-top: 20px;">Generate Graph</button>
 
     <div id="graph-container" class="graph-container"></div>
 
     <script>
         function createMatrixInput() {
-            const size = document.getElementById('matrix-size').value;
+            const size = parseInt(document.getElementById('matrix-size').value, 10);
             const container = document.getElementById('matrix-container');
 
-            if (!size) {
-                alert("Please specify a size for the matrix.");
+            if (!size || size < 2 || size > 10) {
+                alert("Please specify a matrix size between 2 and 10.");
                 return;
             }
 
-            container.innerHTML = ''; // Clear existing matrix
+            container.innerHTML = ''; // Clear any existing matrix
 
+            // Generate a table-like grid for the matrix
             for (let i = 0; i < size; i++) {
-                const rowDiv = document.createElement('div');
-                rowDiv.classList.add('matrix-row');
+                const row = document.createElement('tr');
                 for (let j = 0; j < size; j++) {
+                    const cell = document.createElement('td');
                     const input = document.createElement('input');
                     input.type = 'number';
                     input.min = '0';
+                    input.max = '1';
+                    input.value = '0';
                     input.id = `cell-${i}-${j}`;
-                    rowDiv.appendChild(input);
+                    cell.appendChild(input);
+                    row.appendChild(cell);
                 }
-                container.appendChild(rowDiv);
+                container.appendChild(row);
             }
         }
 
         function generateGraph() {
-            const size = document.getElementById('matrix-size').value;
-            if (!size) {
+            const size = parseInt(document.getElementById('matrix-size').value, 10);
+            if (!size || size < 2) {
                 alert("Please specify and generate the adjacency matrix first.");
                 return;
             }
