@@ -84,6 +84,7 @@ author_profile: false
             .force("charge", d3.forceManyBody().strength(-500))
             .force("center", d3.forceCenter(width / 2, height / 2));
 
+        // Remove any existing SVG
         document.querySelectorAll("svg").forEach((svg) => svg.remove());
 
         const svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
@@ -129,6 +130,22 @@ author_profile: false
             circle.attr("transform", (d) => `translate(${d.x},${d.y})`);
 
             text.attr("transform", (d) => `translate(${d.x},${d.y})`);
+        });
+
+        // Adjust SVG size based on the bounding box of all nodes
+        force.on("end", function() {
+            const xExtent = d3.extent(d3.values(nodes), d => d.x);
+            const yExtent = d3.extent(d3.values(nodes), d => d.y);
+            const padding = 50; // Add some padding
+
+            // Resize SVG based on the extent of the nodes
+            const adjustedWidth = Math.max(width, xExtent[1] - xExtent[0] + padding);
+            const adjustedHeight = Math.max(height, yExtent[1] - yExtent[0] + padding);
+
+            svg.attr("width", adjustedWidth).attr("height", adjustedHeight);
+
+            // Recenter the graph to the middle
+            force.force("center", d3.forceCenter(adjustedWidth / 2, adjustedHeight / 2));
         });
 
         function dragstarted(event, d) {
