@@ -7,18 +7,22 @@ redirect_from:
   - /about.html
 ---
 
-I am a senior undergraduate student at [UCLA](https://www.cs.ucla.edu/), completing my BS in Computer Science. Previously, I was a Software Engineering Intern at [Microsoft](https://www.microsoft.com/en-us/), where I was part of Windows Fundamentals. Here I specifcally worked as part of the Windows updates team and developed tools to help debug windows udpate deployments. I am also an undergraduate researcher at [SysArch](https://ssysarch.ee.ucla.edu/), focusing on adversarial machine learning attacks and defenses. My interests span Operating Systems, Programming Languages, Machine Learning, and Theoretical Computer Science, and are at a an upper-division undergradaute level, with a few graduate level courses in Machine Learning.
+I am a Software Engineer at [Microsoft](https://www.microsoft.com/). I completed my bachelors in Computer Science at [UCLA](https://www.cs.ucla.edu/). Before becomning a SWE, I was an intern at Microsoft part of the Windows Findamentals Team. Before that I was an intern at [Roche](https://www.roche.com/), where I developed software test suites and optimized file transfer protocols for a molecular sequencer.
+
+At UCLA, I took graduate-level courses in Machine Learning and Theoretical Computer Science. I was fortunate to have Professor Raghu Meka as my faculty advisor. I  also taught AI concepts to fellow undergrads as part of [ACM at UCLA](https://www.uclaacm.com/), and conducted research in adversairal ML as an undergradute researcher researcher at [SysArch](https://ssysarch.ee.ucla.edu/).
+
+<!-- I am a senior undergraduate student at [UCLA](https://www.cs.ucla.edu/), completing my BS in Computer Science. Previously, I was a Software Engineering Intern at [Microsoft](https://www.microsoft.com/en-us/), where I was part of Windows Fundamentals. Here I specifcally worked as part of the Windows updates team and developed tools to help debug windows udpate deployments. I am also an undergraduate researcher at [SysArch](https://ssysarch.ee.ucla.edu/), focusing on adversarial machine learning attacks and defenses. My interests span Operating Systems, Programming Languages, Machine Learning, and Theoretical Computer Science, and are at a an upper-division undergradaute level, with a few graduate level courses in Machine Learning. -->
 
 
-More About Me
+<!-- More About Me
 ======
 I grew up in sunny San Diego and attended Canyon Crest Academy for high school. There, I was a founding member of the Cryptography Club and had a great experience as a TA for three quarters in Math, Physics, and Computer Science. I then enrolled at UCLA as an undergraduate student in Computer Science. While at UCLA, I got involved with [ACM at UCLA](https://www.uclaacm.com/), specifically as part of ACM AI. I served as a workshops officer, where I had the privilege of hosting weekly workshops to teach the basics of machine learning to hundreds of undergraduate students. During the beginning of my undergrad I also did research on federated machine learning at UCSC and worked on a website for DNA origami at UC Davis. Before going to Microsoft as an intern I was a Software Engineering Intern at [Roche](https://www.roche.com/), where I developed software test suites and optimized file transfer protocols for a molecular sequencer. 
 
-Lately, I’ve been focusing on making computer science education more engaging and accessible for everyone. I am currently making my notes for several upper-division classes publicly available and open-source. I am also working on launching a YouTube channel (@CSTheoryTutor).
+Lately, I’ve been focusing on making computer science education more engaging and accessible for everyone. I am currently making my notes for several upper-division classes publicly available and open-source. I am also working on launching a YouTube channel (@CSTheoryTutor). -->
 
-Site Outline
+<!-- Site Outline
 ======
-If you would like to get in contact with me the best way to reach me is via email. On other pages you can find information about what books I am reading, access to notes I have taken or compiled, previous expereince, and any talks or new videos I have released. 
+If you would like to get in contact with me the best way to reach me is via email. On other pages you can find information about what books I am reading, access to notes I have taken or compiled, previous expereince, and any talks or new videos I have released.  -->
 
 
 Some Fun Facts
